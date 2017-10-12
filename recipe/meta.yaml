@@ -1,4 +1,4 @@
-{% set version = '0.1.1' %}
+{% set version = '0.2.4' %}
 
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
@@ -12,63 +12,114 @@ source:
   url:
     - https://cran.r-project.org/src/contrib/anomalyDetection_{{ version }}.tar.gz
     - https://cran.r-project.org/src/contrib/Archive/anomalyDetection/anomalyDetection_{{ version }}.tar.gz
-  sha256: 8e900e25a032952818ec35476ecb013ed07d202e9166a18f13802e8560c38610
+  sha256: 5f0248d2e8fb03f8be54bc2ad76c11fe9f7bc481d1234c53e83dedf4fb4a3529
+
+
+  # patches:
+   # List any patch files here
+   # - fix.patch
 
 build:
+  # If this is a new build for the same version, increment the build number.
   number: 0
-  # r-tidyverse is not available under windows
-  skip: true  # [win]
+
+  # This is required to make R link correctly on Linux.
   rpaths:
     - lib/R/lib/
     - lib/
 
+# Suggests: gplots, knitr, RColorBrewer, rmarkdown, testthat,
 requirements:
   build:
     - r-base
+    - {{ compiler('cxx') }}      # [not win]
+    - {{ compiler('fortran') }}  # [not win]
+    - {{native}}toolchain        # [win]
+    - {{posix}}filesystem        # [win]
+    - {{posix}}make
     - r-mass
-    - r-rcolorbrewer
+    - r-rcpp >=0.12.11
+    - r-rcpparmadillo
     - r-caret
     - r-dplyr
+    - r-ggplot2
     - r-gmp
-    - r-gplots
     - r-magrittr
-    - r-matrixstats
     - r-plyr
     - r-purrr
-    - r-qdaptools
     - r-tibble
-    - r-tidyverse
+    - r-tidyr
+
   run:
     - r-base
+    - {{native}}gcc-libs         # [win]
     - r-mass
-    - r-rcolorbrewer
+    - r-rcpp >=0.12.11
+    - r-rcpparmadillo
     - r-caret
     - r-dplyr
+    - r-ggplot2
     - r-gmp
-    - r-gplots
     - r-magrittr
-    - r-matrixstats
     - r-plyr
     - r-purrr
-    - r-qdaptools
     - r-tibble
-    - r-tidyverse
+    - r-tidyr
 
 test:
   commands:
-    - $R -e "library('anomalyDetection')"  # [not win]
+    # You can put additional test commands to be run here.
+    - $R -e "library('anomalyDetection')"           # [not win]
     - "\"%R%\" -e \"library('anomalyDetection')\""  # [win]
 
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
 about:
-  home: https://github.com/bradleyboehmke/anomalyDetection
+  home: https://github.com/AFIT-R/anomalyDetection
   license: GPL (>= 2)
-  summary: |
-    Implements procedures to aid in detecting network log anomalies. By combining various
-    multivariate analytic approaches relevant to network anomaly detection, it provides
-    cyber analysts efficient means to detect suspected anomalies requiring further evaluation.
+  summary: Implements procedures to aid in detecting network log anomalies. By  combining various
+    multivariate analytic approaches relevant to network anomaly  detection, it provides
+    cyber analysts efficient means to detect suspected  anomalies requiring further
+    evaluation.
   license_family: GPL3
 
 extra:
   recipe-maintainers:
     - johanneskoester
     - bgruening
+    - mingwandroid
+
+# The original CRAN metadata for this package was:
+
+# Package: anomalyDetection
+# Type: Package
+# Title: Implementation of Augmented Network Log Anomaly Detection Procedures
+# Version: 0.2.4
+# Authors@R: c(  person("Andrew", "McCarthy", email = "andrew.mccarthy@theperducogroup.com", role = c("aut", "cre")), person("Brandon", "Greenwell", email = "greenwell.brandon@gmail.com", role = c("aut")), person("Bradley", "Boehmke",  email = "bradleyboehmke@gmail.com",  role = c("aut")),  person("Robert", "Gutierrez",  email = "rjgutierrez2015@gmail.com",  role = c("aut")), person("Kenneth", "Bauer",  email = "kenneth.bauer@afit.edu",  role = c("ctb")), person("Trevor", "Bihl",  email = "trevor.bihl.2@us.af.mil",  role = c("ctb")), person("Cade", "Saie",  email = "cade.saie@gmail.com",  role = c("ctb")) )
+# Maintainer: Andrew McCarthy <andrew.mccarthy@theperducogroup.com>
+# Date: 2017-09-22
+# Description: Implements procedures to aid in detecting network log anomalies. By  combining various multivariate analytic approaches relevant to network anomaly  detection, it provides cyber analysts efficient means to detect suspected  anomalies requiring further evaluation.
+# URL: https://github.com/AFIT-R/anomalyDetection
+# BugReports: https://github.com/AFIT-R/anomalyDetection/issues
+# License: GPL (>= 2)
+# Encoding: UTF-8
+# LazyData: true
+# Depends: R (>= 2.10)
+# Imports: caret, dplyr, ggplot2, gmp, magrittr, MASS, plyr, purrr, Rcpp (>= 0.12.11), stats, tibble, tidyr,
+# RoxygenNote: 6.0.1
+# Suggests: gplots, knitr, RColorBrewer, rmarkdown, testthat,
+# LinkingTo: Rcpp, RcppArmadillo
+# VignetteBuilder: knitr
+# NeedsCompilation: yes
+# Packaged: 2017-09-22 12:58:14 UTC; Andy
+# Author: Andrew McCarthy [aut, cre], Brandon Greenwell [aut], Bradley Boehmke [aut], Robert Gutierrez [aut], Kenneth Bauer [ctb], Trevor Bihl [ctb], Cade Saie [ctb]
+# Repository: CRAN
+# Date/Publication: 2017-09-22 17:21:02 UTC
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
