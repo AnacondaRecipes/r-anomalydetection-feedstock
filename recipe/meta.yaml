@@ -10,8 +10,8 @@ package:
 source:
   fn: anomalyDetection_{{ version }}.tar.gz
   url:
-    - https://cran.r-project.org/src/contrib/anomalyDetection_{{ version }}.tar.gz
-    - https://cran.r-project.org/src/contrib/Archive/anomalyDetection/anomalyDetection_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/anomalyDetection_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/anomalyDetection/anomalyDetection_{{ version }}.tar.gz
   sha256: 5f0248d2e8fb03f8be54bc2ad76c11fe9f7bc481d1234c53e83dedf4fb4a3529
 
 
