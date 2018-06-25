@@ -47,6 +47,7 @@ requirements:
     - r-purrr
     - r-tibble
     - r-tidyr
+    - libopenblas                # [osx]
 
   run:
     - r-base
@@ -63,6 +64,7 @@ requirements:
     - r-purrr
     - r-tibble
     - r-tidyr
+    - libopenblas                # [osx]
 
 test:
   commands:
